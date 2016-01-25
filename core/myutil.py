@@ -1,4 +1,5 @@
-# -*- coding:utf-8 -*- 
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
 import md5
 import base64
 import urllib
@@ -15,7 +16,7 @@ class MyUtil:
 
     @staticmethod
     def encrypt(key , istr):
-        md5Key = MyUtils.getMD5(key)
+        md5Key = MyUtil.getMD5(key)
         buf = ""
         for i in range(0 , len(istr)):
             buf =buf+ chr(ord(md5Key[i%len(md5Key)])^ord(istr[i]))
@@ -29,7 +30,7 @@ class MyUtil:
         istr = urllib.unquote(istr)
         istr = urllib.unquote(istr)
         istr = base64.b64decode(istr)
-        md5Key = MyUtils.getMD5(key)
+        md5Key = MyUtil.getMD5(key)
         buf = ""
         for i in range(0 , len(istr)):
             buf =buf+ chr(ord(md5Key[i%len(md5Key)])^ord(istr[i]))
@@ -37,7 +38,7 @@ class MyUtil:
 
     @staticmethod
     def sign(istr):
-        return MyUtils.getMD5(istr)
+        return MyUtil.getMD5(istr)
     
 
 if __name__ == "__main__":
@@ -52,6 +53,6 @@ if __name__ == "__main__":
     tjmod5 = "HUNQDgEbG19CRAAFB1MHUlAFUFQDUgBTDAACCgUNUFUCUFMFBlsOVQlfFQ1IQ1gARg0GCRJbPh0bFVBLQVwNXw8FEFtUVgxWDVEBAQtUSTwfQQQRQBIRB00DFwJJFwNBFj5EBBcRUApXRA0VAE8ATwFBSUNRERUFUAIXAhADWglQVwtZXUBEGERKFV9WAFAEQUFfGhIVChJYCmpMW1gHE1xWBVNJQEwMXUQNFQtXAlQCUFVTAFZVVgFeBBoeFwtcAwgQW0daD1MMVwQHAVEDUQNbXVASTUcHSRZqTldHEVgJDxBbR1EXURdUFRsRE1ESXA8QFVkOC0QDRAEAAh9aBFJDHkMEAVoAShUVDRE2XSdaQUlDXxI6EFwURlFdW0ALRFUcVUtQG0kbEFJFQAhbD2wACgVVQ19EDVAXFBBRB0cPAlc%252BCA1dAFVEDRVwDlsNQwIBQQhWVVEbShdZXFEQXg8FbQgBQANHAAdWVVdVBlRQVVIFCFNUABtKF0tXWwZuEghfBEdYCFEMVQMABVcMVx9BBwBEFQAUQEQPGgMFUhNKQ1ATBAxdRwNEdFhcDUQAV0FJQ1kMFg8bXBcbCgBTAl9QAlRTUg5XDlMVGxEWWQBQQV9DAFFVXgtUVl1UVlIDRE0QFQoNVQZQAhUNEVcMWQVVXFkIQ0lEShNFSF5cB0NEWxBDSUBJF1YLWENaDlo%252BXgYRCV8FR1wbFVFTEEgf"
     md1 = "TkMCQxNtFQcUQQtfXxYCGlYcUhdIFAQVFjpcB1BDWRAHAFoDVFEAW1IDUFRUAA8LAAdVBV1VXAFT%250AXQlbAVlQURdNQUAXUxEWOUEWUVxEGgJQBlEGVw9VVFNQHUEGCQJcWwQPEVkQDk9QCloGBw0AAEMe%250ARkMBRBYMCQtuAAoFBhAPQ1sAQU8%253D%250A"
 
-    print MyUtils.decrypt(app_key,sig1)
+    print MyUtil.decrypt(app_key,sig1)
     #print MyUtils.sign("we are together:parker love roosee!")
 
