@@ -1,11 +1,10 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-import myutil
-import glob
 import json
+import random
 import threading
 import time
-import random
+
 
 class App(object):
     def __init__(self , phone):

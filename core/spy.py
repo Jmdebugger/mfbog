@@ -1,13 +1,11 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
-import httplib
-import glob
-import urllib2
 import urllib
+import urllib2
 
-"""
-urllib的用法参考http://www.cnblogs.com/wly923/archive/2013/05/07/3057122.html
-"""
+import glob
+
+
 class Spy(object):
     def __init__(self , phone):
         self.phone = phone
@@ -34,7 +32,7 @@ class Spy(object):
         }
         data = urllib.urlencode(data)
         print data
-        req = urllib2.Request(glob.URL_GET_LIST_FOR_ANDROID,data ,header)
+        req = urllib2.Request(glob.URL_GET_LIST_FOR_ANDROID, data, header)
         resp = urllib2.urlopen(req)
         print req.headers
         print resp.headers
