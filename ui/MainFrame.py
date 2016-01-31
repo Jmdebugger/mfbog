@@ -2,6 +2,7 @@
 # -*- coding:utf-8 -*-
 import wx
 import core
+import dialog
 
 class ProportionalSplitter(wx.SplitterWindow):
         def __init__(self,parent, id = -1, proportion=0.66, size = wx.DefaultSize, **kwargs):
@@ -60,58 +61,47 @@ class ProportionalSplitter(wx.SplitterWindow):
                 event.Skip()
 
 
+
 class BrushTreeCtrl(wx.TreeCtrl):
     def __init__(self, *args, **kwargs):
         super(BrushTreeCtrl, self).__init__(*args, **kwargs)
-        self.mBoss = core.Boss("Boss")
-        root = self.AddRoot(self.mBoss.mName, data = wx.TreeItemData(self.mBoss))
-        for phoneManager in self.mBoss.mPhoneManagers:
-            pm = self.AppendItem(root, phoneManager.tid , data = phoneManager)
-            for phone in pm.m
+        self.boss = core.Boss("Boss")
+        bossItem = self.AddRoot(str(self.boss), data = wx.TreeItemData(self.boss))
+        for phoneManager in self.boss.phoneManagers.values():
+            pmItem = self.AppendItem(bossItem, str(phoneManager) , data = phoneManager)
+            for phone in phoneManager.phones.values():
+                phoneItem = self.AppendItem(pmItem , str(phone) , data = phone)
+                for app in phone.apps:
+                    appItem = self.AppendItem(phoneItem , str(app) , data = app)
 
-        os = self.AppendItem(root, 'Operating Systems')
-        pl = self.AppendItem(root, 'Programming Languages')
-        tk = self.AppendItem(root, 'Toolkits')
-        self.AppendItem(os, 'Linux')
-        self.AppendItem(os, 'FreeBSD')
-        self.AppendItem(os, 'OpenBSD')
-        self.AppendItem(os, 'NetBSD')
-        self.AppendItem(os, 'Solaris')
-        cl = self.AppendItem(pl, 'Compiled languages')
-        sl = self.AppendItem(pl, 'Scripting languages')
-        self.AppendItem(cl, 'Java')
-        self.AppendItem(cl, 'C++')
-        self.AppendItem(cl, 'C')
-        self.AppendItem(cl, 'Pascal')
-        self.AppendItem(sl, 'Python')
-        self.AppendItem(sl, 'Ruby')
-        self.AppendItem(sl, 'Tcl')
-        self.AppendItem(sl, 'PHP')
-        self.AppendItem(tk, 'Qt')
-        self.AppendItem(tk, 'MFC')
-        self.AppendItem(tk, 'wxPython')
-        self.AppendItem(tk, 'GTK+')
-        self.AppendItem(tk, 'Swing')
 
 class MainFrame(wx.Frame):
+    ID_ADD_PHONE_MANAGER = 100
     def __initData(self):
         self.mBoss = core.Boss(u"boss")
 
     def OnSelChanged(self ,event):
         item = event.GetItem()
-        print self.mBrushTree.GetItemText(item)
+        data = self.mBrushTree.GetPyData(item)
+        print type(data)
 
     def onSelPopupMenu(self ,event):
-        item = event.GetItem()
-        print self.mBrushTree.GetItemText(item)
+        id = event.GetId()
+        if id == MainFrame.ID_ADD_PHONE_MANAGER:
+            dlg = dialog.BossDialog(self , wx.ID_ANY , u"添加账号")
+            dlg.Centre()
+            ret = dlg.ShowModal()
+            if ret == wx.ID_OK:
+                print dlg.tcTid.GetValue()
+            dlg.Destroy()
 
     def OnShowPopup(self ,event):
-        item = event.GetItem()
-        print self.mBrushTree.GetItemText(item)
+        data = self.mBrushTree.GetPyData(event.GetItem())
         popupMenu = wx.Menu()
-        for text in "Add Delete Edit".split():
-            item = popupMenu.Append(-1, text)
-        self.mBrushTree.Bind(wx.EVT_MENU, self.onSelPopupMenu)
+        if isinstance(data , core.Boss):
+            menuItem = wx.MenuItem(popupMenu,MainFrame.ID_ADD_PHONE_MANAGER, u"添加账号")
+            popupMenu.AppendItem(menuItem)
+            self.Bind(wx.EVT_MENU, self.onSelPopupMenu ,menuItem )
         self.mBrushTree.PopupMenu(popupMenu, event.GetPoint())
         popupMenu.Destroy()
 
@@ -119,7 +109,7 @@ class MainFrame(wx.Frame):
         self.mSplit1 = ProportionalSplitter(self,-1, 0.3)
         self.mSplit2 = ProportionalSplitter(self.mSplit1,-1, 0.7)
 
-        self.mBrushTree = BrushTreeCtrl(self.mSplit1 , 1)
+        self.mBrushTree = BrushTreeCtrl(self.mSplit1 , wx.ID_ANY)
         self.mBrushTree.SetBackgroundColour('gray')
         self.mBrushTree.Bind(wx.EVT_TREE_SEL_CHANGED , self.OnSelChanged)
         self.mBrushTree.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, self.OnShowPopup)
