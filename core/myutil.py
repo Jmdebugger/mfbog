@@ -21,8 +21,8 @@ class MyUtil:
         for i in range(0 , len(istr)):
             buf =buf+ chr(ord(md5Key[i%len(md5Key)])^ord(istr[i]))
         buf = base64.b64encode(buf)
-        istr = urllib.quote(istr)
-        istr = urllib.quote(istr)
+        #istr = urllib.quote(istr)
+        #istr = urllib.quote(istr)
         return buf
 
     @staticmethod
@@ -39,7 +39,6 @@ class MyUtil:
     @staticmethod
     def sign(istr):
         return MyUtil.getMD5(istr)
-    
 
 if __name__ == "__main__":
     app_key = "0307cafd710cab421a0310b134bd4e4c"

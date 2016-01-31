@@ -13,6 +13,5 @@ class Main(wx.App):
 if __name__ == "__main__":
     main = Main()
     customsize = (wx.DisplaySize()[0]*0.7 ,wx.DisplaySize()[1]*0.9)
-    frame = ui.MainFrame(None, wx.ID_ANY, glob.SOFTWARE_NAME , size = customsize)
-    frame.Show(True)
+    frame = ui.MainFrame(None, wx.ID_ANY, glob.SOFTWARE_NAME, size = customsize)
     main.MainLoop()

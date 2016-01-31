@@ -3,7 +3,16 @@
 import threading
 class Phone(threading.Thread):
     def __init__(self ,phoneManager):
-        pass
+        self.imei = None
+        self.imsi = None
+        self.wmac = None
+        self.os = "Android"
+        self.resolution = None
+        self.access = None
+        self.os_version = None
+        self.android_id = None
+        self.uid = None
+        self.total_time = None
 
 
     def installApp(app):
@@ -18,14 +27,7 @@ class Phone(threading.Thread):
         pass
 
 
-class PhoneManager(object):
-    def __init__(self):
-        pass
-    def installAppsToPhone(self ,phone , apps):
-        pass
 
-    def generatePhone(self , phoneid):
-        pass
 
 
 

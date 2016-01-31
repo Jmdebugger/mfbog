@@ -1,0 +1,1 @@
+pyinstaller使用说明： https://mborgerson.com/creating-an-executable-from-a-python-script
