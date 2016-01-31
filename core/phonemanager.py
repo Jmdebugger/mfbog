@@ -3,10 +3,10 @@
 
 class PhoneManager(object):
     def __init__(self ,boss ,tid , name):
-        self.mBoss = boss
-        self.mTid = tid
-        self.mName = name
-        self.mPhones = {}
+        self.boss = boss
+        self.tid = tid
+        self.name = name
+        self.phones = {}
 
     def installAppsToPhone(self ,phone , apps):
         pass

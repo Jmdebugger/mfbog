@@ -13,6 +13,7 @@ class Phone(threading.Thread):
         self.android_id = None
         self.uid = None
         self.total_time = None
+        self.apps = {}
 
 
     def installApp(app):
