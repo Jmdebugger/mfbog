@@ -4,6 +4,8 @@ import wx
 import core
 import dialog
 
+ID_ADD_PHONE_MANAGER = 100
+ID_ADD_PHONE = 101
 class ProportionalSplitter(wx.SplitterWindow):
         def __init__(self,parent, id = -1, proportion=0.66, size = wx.DefaultSize, **kwargs):
                 super(ProportionalSplitter ,self).__init__(parent,id,wx.Point(0, 0),size, **kwargs)
@@ -66,19 +68,33 @@ class BrushTreeCtrl(wx.TreeCtrl):
     def __init__(self, *args, **kwargs):
         super(BrushTreeCtrl, self).__init__(*args, **kwargs)
         self.boss = core.Boss("Boss")
-        bossItem = self.AddRoot(str(self.boss), data = wx.TreeItemData(self.boss))
+        self.bossItem = self.AddRoot(unicode(self.boss), data = wx.TreeItemData(self.boss))
+        self.boss.item = self.bossItem
         for phoneManager in self.boss.phoneManagers.values():
-            pmItem = self.AppendItem(bossItem, str(phoneManager) , data = phoneManager)
+            pmItem = self.AppendItem(self.bossItem, unicode(phoneManager) , data = wx.TreeItemData(phoneManager))
+            phoneManager.item = pmItem
             for phone in phoneManager.phones.values():
-                phoneItem = self.AppendItem(pmItem , str(phone) , data = phone)
+                phoneItem = self.AppendItem(pmItem , unicode(phone) , data = wx.TreeItemData(phone))
+                phone.item = phoneItem
                 for app in phone.apps:
-                    appItem = self.AppendItem(phoneItem , str(app) , data = app)
+                    appItem = self.AppendItem(phoneItem , unicode(app) , data = wx.TreeItemData(app))
+                    app.item = appItem
+
+    def addPhoneManager(self ,tid , name):
+        pm = self.boss.addPhoneManager(tid , name)
+        self.AppendItem(self.bossItem ,unicode(pm) , data = wx.TreeItemData(pm))
+
+    def addPhone(self , pmItem , phone):
+        pass
+
+
+
+
 
 
 class MainFrame(wx.Frame):
-    ID_ADD_PHONE_MANAGER = 100
     def __initData(self):
-        self.mBoss = core.Boss(u"boss")
+        pass
 
     def OnSelChanged(self ,event):
         item = event.GetItem()
@@ -87,21 +103,28 @@ class MainFrame(wx.Frame):
 
     def onSelPopupMenu(self ,event):
         id = event.GetId()
-        if id == MainFrame.ID_ADD_PHONE_MANAGER:
+        if id == ID_ADD_PHONE_MANAGER:
             dlg = dialog.BossDialog(self , wx.ID_ANY , u"添加账号")
             dlg.Centre()
             ret = dlg.ShowModal()
             if ret == wx.ID_OK:
-                print dlg.tcTid.GetValue()
+                tid = dlg.tcTid.GetValue()
+                name = dlg.tcName.GetValue()
+                self.mBrushTree.addPhoneManager(tid ,name)
             dlg.Destroy()
+        elif id == ID_ADD_PHONE:
+            pass
 
     def OnShowPopup(self ,event):
         data = self.mBrushTree.GetPyData(event.GetItem())
         popupMenu = wx.Menu()
         if isinstance(data , core.Boss):
-            menuItem = wx.MenuItem(popupMenu,MainFrame.ID_ADD_PHONE_MANAGER, u"添加账号")
-            popupMenu.AppendItem(menuItem)
-            self.Bind(wx.EVT_MENU, self.onSelPopupMenu ,menuItem )
+            menuItem = wx.MenuItem(popupMenu,ID_ADD_PHONE_MANAGER, u"添加账号")
+        elif isinstance(data ,core.PhoneManager):
+            menuItem = wx.MenuItem(popupMenu,ID_ADD_PHONE, u"添加手机")
+
+        popupMenu.AppendItem(menuItem)
+        self.Bind(wx.EVT_MENU, self.onSelPopupMenu ,menuItem )
         self.mBrushTree.PopupMenu(popupMenu, event.GetPoint())
         popupMenu.Destroy()
 

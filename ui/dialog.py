@@ -21,6 +21,9 @@ class BossDialog(wx.Dialog):
         else:
             wx.MessageBox(u"请输入正确的账号！" , u"请输入正确的账号！")
 
+class PhoneManagerDialog(wx.Dialog):
+    pass
+
 
 if __name__ == "__main__":
     app = wx.App()

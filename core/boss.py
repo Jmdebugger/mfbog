@@ -4,9 +4,13 @@ from phonemanager import PhoneManager
 class Boss(object):
     def __init__(self , name):
         self.name = name
+        self.item = None
         self.phoneManagers = {}
 
     def __str__(self):
+        return self.name
+
+    def __unicode__(self):
         return self.name
 
     def addPhoneManager(self , tid , name):

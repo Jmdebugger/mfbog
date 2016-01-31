@@ -13,3 +13,15 @@ class PhoneManager(object):
 
     def generatePhone(self , phoneid):
         pass
+
+    def onAdd(self):
+        pass
+
+    def onDel(self):
+        pass
+
+    def __unicode__(self):
+        return u"%s[%s]"%(self.tid ,self.name)
+
+    def __str__(self):
+        return unicode(self).encode('utf-8')
