@@ -19,7 +19,10 @@ class BossDialog(wx.Dialog):
         if self.checkTid(self.tcTid.GetValue):
             self.EndModal(wx.ID_OK)
         else:
-            wx.MessageBox(u"请输入正确的账号！" , u"请输入正确的账号！")
+            wx.MessageBox( u"请输入正确的账号！",u"错误" )
+
+
+
 
 class PhoneManagerDialog(wx.Dialog):
     pass

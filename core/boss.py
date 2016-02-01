@@ -16,6 +16,7 @@ class Boss(object):
     def addPhoneManager(self , tid , name):
         if tid not in self.phoneManagers.keys():
             pm = PhoneManager(self ,tid , name)
+            self.phoneManagers[tid] = pm
             pm.onAdd()
             return pm
         else:

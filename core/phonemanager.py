@@ -6,6 +6,7 @@ class PhoneManager(object):
         self.boss = boss
         self.tid = tid
         self.name = name
+        self.item = None
         self.phones = {}
 
     def installAppsToPhone(self ,phone , apps):
@@ -23,5 +24,3 @@ class PhoneManager(object):
     def __unicode__(self):
         return u"%s[%s]"%(self.tid ,self.name)
 
-    def __str__(self):
-        return unicode(self).encode('utf-8')
