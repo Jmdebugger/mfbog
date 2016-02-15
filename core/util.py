@@ -3,11 +3,22 @@
 import md5
 import base64
 import urllib
+import glob
+
+
+
+
+
+
+class UnionAppListUtil:
+    pass
+
+
+
+
 
 class MyUtil:
-    def __init__(self):
-        pass
-        
+
     @staticmethod
     def getMD5(istr):
         m = md5.new()   

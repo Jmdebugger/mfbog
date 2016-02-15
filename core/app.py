@@ -4,7 +4,7 @@ import json
 import random
 import threading
 import time
-import myutil
+import util
 import requests
 import urllib
 
@@ -65,7 +65,7 @@ class AppUsbHelper(App):
                   "promotion_method":self.promotion_method
                   }
         info = {"body":body , "header":header}
-        return myutil.MyUtil.encrypt("0307cafd710cab421a0310b134bd4e4c",urllib.quote(json.dumps(info)))
+        return util.MyUtil.encrypt("0307cafd710cab421a0310b134bd4e4c", urllib.quote(json.dumps(info)))
 
 
     def action_sendData(self):
@@ -90,8 +90,8 @@ class AppUsbHelper(App):
             "action": "getlist",
             "uid": self.phone.uid,
             "returnType": "json",
-            "sign": myutil.MyUtil.encrypt("{C8B22E37-AF95-4b84-9CCA-18A27D09D18B}",
-                                          myutil.MyUtil.getMD5("getlist" + str(self.phone.uid)))
+            "sign": util.MyUtil.encrypt("{C8B22E37-AF95-4b84-9CCA-18A27D09D18B}",
+                                        util.MyUtil.getMD5("getlist" + str(self.phone.uid)))
         }
         r = requests.post(glob.URL_GET_LIST_FOR_ANDROID, data=data, headers=headers)
         if r.status_code == 200:

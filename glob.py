@@ -7,3 +7,6 @@ URL_GET_LIST_FOR_ANDROID = "http://shouji.2345.com/api/getlist4android.php"
 
 
 SOFTWARE_NAME = u"刷分精灵"
+
+CurrentDir = u"c:\\workspace\\"
+DbDir = CurrentDir + u"db\\"

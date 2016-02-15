@@ -4,7 +4,7 @@ import urllib
 import requests
 
 import glob
-import myutil
+import util
 import json
 
 
@@ -13,15 +13,16 @@ class Spy(object):
         self.phone = phone
         pass
 
-    def getListForAndroid(self):
+    @staticmethod
+    def getListForAndroid(tid):
         headers = {'Accept': None,
                    'User-Agent': None}
         data = {
             "action": "getlist",
-            "uid": self.phone.uid,
+            "uid": tid,
             "returnType": "json",
-            "sign": myutil.MyUtil.encrypt("{C8B22E37-AF95-4b84-9CCA-18A27D09D18B}",
-                                          myutil.MyUtil.getMD5("getlist" + str(self.phone.uid)))
+            "sign": util.MyUtil.encrypt("{C8B22E37-AF95-4b84-9CCA-18A27D09D18B}",
+                                        util.MyUtil.getMD5("getlist" + str(tid)))
         }
         r = requests.post(glob.URL_GET_LIST_FOR_ANDROID, data=data, headers=headers)
         if r.status_code == 200:
@@ -60,10 +61,5 @@ class Spy(object):
 
 
 if __name__ == "__main__":
-    import phone
 
-    phone = phone.Phone(None)
-    phone.uid = 12345678  # 68866988
-    spy = Spy(phone)
-    spy.getListForAndroid()
-    spy.action_sendData()
+    print Spy.getListForAndroid(12345678)
