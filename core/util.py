@@ -3,7 +3,6 @@
 import md5
 import base64
 import urllib
-import glob
 
 
 

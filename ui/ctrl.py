@@ -2,30 +2,107 @@
 # -*- coding:utf-8 -*-
 import wx
 import core
+import sys
+from wx.lib.mixins.listctrl import CheckListCtrlMixin
+try:
+    from agw import ultimatelistctrl as ULC
+except ImportError: # if it's not there locally, try the wxPython lib.
+    from wx.lib.agw import ultimatelistctrl as ULC
 
 
-class AppListCtrl(wx.ListCtrl):
-    def __init__(self, tid , *args, **kwargs):
-        super(AppListCtrl, self).__init__(*args, **kwargs)
-        ret = core.Spy.getListForAndroid(tid)
+class PhoneListCtrl(ULC.UltimateListCtrl):
+    def __loadData(self):
+        for i in range(0,10):
+            cb = wx.CheckBox(self, -1, u"荣耀4X")
+            cbb = wx.ComboBox(self, -1, value = '1', choices = ['10', '20', '40', '60', '80','100'], style = wx.CB_DROPDOWN|wx.TE_PROCESS_ENTER)
+            index = self.InsertStringItem(sys.maxint, "")
+            self.SetItemWindow(index, 0, cb, expand = True)
+            self.SetStringItem(index, 1, "packagename")
+            self.SetStringItem(index, 2, "packagenaddme")
+            self.SetStringItem(index, 3, "packagenaddme")
+            self.SetItemWindow(index, 4, cbb, expand = True)
+            self.SetItemData(index , [cb,cbb])
+
+
+
+
+
+    def __init__(self, parent, tid , id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize, style = ULC.ULC_MASK_TYPE, agwStyle = ULC.ULC_REPORT|ULC.ULC_HAS_VARIABLE_ROW_HEIGHT|ULC.ULC_HRULES|ULC.ULC_VRULES|ULC.ULC_NO_FULL_ROW_SELECT,
+                 validator=wx.DefaultValidator, name="PhoneListCtrl"):
+        super(PhoneListCtrl, self).__init__(parent, id, pos, size, style, agwStyle, validator, name)
+        self.tid = tid
+        self.InsertColumn(0, u"机型")
+        self.InsertColumn(1, u"商标")
+        self.InsertColumn(2, u"分辨率")
+        self.InsertColumn(3, u"系统版本")
+        #self.InsertColumn(3, u"MODEL")
+        self.InsertColumn(4, u"数量")
+        self.__loadData()
+        self.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(2, wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(3, wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(4, wx.LIST_AUTOSIZE)
+
+class PhonePanel(wx.Panel):
+    def __init__(self, parent ,tid):
+        wx.Panel.__init__(self, parent, -1)
+        self.list = PhoneListCtrl(self ,tid)
+        sizer = wx.BoxSizer()
+        sizer.Add(self.list, 1, wx.EXPAND)
+        self.SetSizer(sizer)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
+        self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselected, self.list)
+    def OnItemSelected(self, evt):
+        pass
+    def OnItemDeselected(self, evt):
+        pass
+
+
+
+class AppListCtrl(ULC.UltimateListCtrl):
+    def __loadData(self):
+        ret = core.Spy.getListForAndroid(self.tid)
         softlist = []
         if ret is not None:
             softlist = ret["softlist"]
+            print softlist
+        for soft in softlist:
+            cb = wx.CheckBox(self, -1, soft["softname"])
+            index =  self.InsertStringItem(sys.maxint ,"")
+            self.SetItemWindow(index, 0, cb, expand = True)
+            self.SetStringItem(index, 1, soft["packagename"])
+            self.SetStringItem(index, 2, soft["versionName"])
+            self.SetStringItem(index, 3, soft["description"])
+            self.SetItemData(index , [cb])
+
+    def __init__(self, parent, tid , id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize, style = ULC.ULC_MASK_TYPE, agwStyle = ULC.ULC_REPORT|ULC.ULC_HAS_VARIABLE_ROW_HEIGHT|ULC.ULC_HRULES|ULC.ULC_VRULES|ULC.ULC_NO_FULL_ROW_SELECT,
+                 validator=wx.DefaultValidator, name="AppListCtrl"):
+        super(AppListCtrl, self).__init__(parent, id, pos, size, style, agwStyle, validator, name)
+        self.tid = tid
+        self.InsertColumn(0, u"应用名")
+        self.InsertColumn(1, u"包名")
+        self.InsertColumn(2, u"版本")
+        self.InsertColumn(3, u"描述")
+        self.__loadData()
+        self.SetColumnWidth(0, wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(1, wx.LIST_AUTOSIZE)
+        self.SetColumnWidth(2, wx.LIST_AUTOSIZE)
 
 
-
-
-
-
-
-
-
-
-
-
-class PhoneListCtrl(wx.ListCtrl):
-    pass
-
+class AppPanel(wx.Panel):
+    def __init__(self, parent ,tid):
+        wx.Panel.__init__(self, parent, -1)
+        self.list = AppListCtrl(self ,tid)
+        sizer = wx.BoxSizer()
+        sizer.Add(self.list, 1, wx.EXPAND)
+        self.SetSizer(sizer)
+        self.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected, self.list)
+        self.Bind(wx.EVT_LIST_ITEM_DESELECTED, self.OnItemDeselected, self.list)
+    def OnItemSelected(self, evt):
+        pass
+    def OnItemDeselected(self, evt):
+        pass
 
 
 class NotificationPanel(wx.Panel):

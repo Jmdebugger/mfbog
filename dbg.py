@@ -1,33 +1,30 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
 import wx
-
-class AppListCtrl(wx.ListCtrl):
+class ProxyPanel(wx.Panel):
     def __init__(self, parent):
-        super(AppListCtrl, self).__init__(parent, style=wx.LC_REPORT)
+        wx.Panel.__init__(self, parent, -1)
 
-        # Attributes
-        self._il = wx.ImageList(16, 16)
+        box = wx.StaticBox(self, -1, u"代理IP设置")
+        bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        # Setup Image List
-        bmp = wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_MENU, (16,16))
-        img_idx = self._il.Add(bmp)
-        self.SetImageList(self._il, wx.IMAGE_LIST_SMALL)
+        t2 = wx.StaticText(self, -1, "Controls placed \"inside\" the box are really its siblings")
+        t1 = wx.StaticText(self, -1, "Controls placed \"inside\" the box are really its siblings")
+        bsizer.Add(t1, 1, wx.TOP|wx.LEFT)
+        bsizer.Add(t2, 1, wx.TOP|wx.LEFT)
 
-        # Setup ListCtrl
-        self.InsertColumn(0, "Column One")
-        self.InsertColumn(1, "Column two")
 
-        # Add Some items to the ListCtrl
-        for x in range(10):
-            self.Append(("ListCtrl Item #%d" % x,"ListCtrl Item #%d" % (x+1)))
-            print self.GetItemCount()
-            self.SetItemImage(self.GetItemCount()-1, img_idx)
+        border = wx.BoxSizer()
+        border.Add(bsizer, 1, wx.EXPAND|wx.ALL)
+        self.SetSizer(border)
+
 
 class MyFrame(wx.Frame):
     def __init__(self, parent):
         super(MyFrame, self).__init__(parent, title="ListCtrl with Icons")
 
         # Attributes
-        self._list = AppListCtrl(self)
+        self._list = ProxyPanel(self)
 
 class MyApp(wx.App):
     def OnInit(self):

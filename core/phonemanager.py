@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding:utf-8 -*-
+from spy import Spy
+import glob
 
 class PhoneManager(object):
     def __init__(self ,boss ,tid , name):
@@ -8,9 +10,15 @@ class PhoneManager(object):
         self.name = name
         self.item = None
         self.phones = {}
+        self.rootDIr = ("%s%d\\")%(glob.DbDir,self.tid)
 
-    def installAppsToPhone(self ,phone , apps):
-        pass
+    def fetchUnionApps(self):
+        ret = Spy.getListForAndroid(self.tid)
+        softlist = []
+        if ret is not None:
+            softlist = ret["softlist"]
+
+
 
     def generatePhone(self , phoneid):
         pass
